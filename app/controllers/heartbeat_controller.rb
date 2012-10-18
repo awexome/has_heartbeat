@@ -14,7 +14,6 @@ class HeartbeatController < ActionController::Base
       else
         Rails.logger.info "Heartbeat not checking against database"
       end
-      raise Exception.new("Funky error occurred in your systemz")
       Rails.logger.info "Application Heart Beating OK"
       render :text => "Application Heart Beating OK"
     rescue Exception => e
