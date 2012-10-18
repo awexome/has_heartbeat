@@ -1,0 +1,10 @@
+= HasHeartbeat Road Map
+
+
+== v0.1
+
+Expected release October 2012.
+
+Initial features planned, pulled from previous Awexome Labs client
+project components.
+

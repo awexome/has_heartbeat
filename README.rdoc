@@ -1,0 +1,85 @@
+= HasHeartbeat
+
+Controller with target for heartbeat monitoring with body, HTTP status code, and Airbrake
+issue identification.
+
+
+== Install
+
+HasHeartbeat is intended for use in Rails applications. To add a heartbeat endpoint to your
+application, add HasHeartbeat to your Gemfile:
+
+  gem "has_heartbeat"
+
+The gem has dependencies on versions of Rails from 3.1 and upward, as well as a dependency
+on the Airbrake notification gem, which will be added to your dependency set.
+
+
+== Usage
+
+By adding the HasHeartbeat gem to your project, your project will have a "/heartbeat" endpoint
+added to your routes. You can add this URL to your heartbeat/monitring service of choice or 
+strike it directly to verify that your application is alive and well.
+
+The heartbeat action responds with one of two possible responses. In the case of an app's
+successfully beating heart:
+
+  HTTP Status:   200 OK
+  Response Body: Application Heart Beating OK
+
+And the case arising from internal issue or error:
+
+  HTTP Status:   500 Server Error
+  Response Body: 500 Internet Server Error: Application Heart Palpitations
+
+Configure your monitoring service to check against status codes and/or response body text to
+properly triage responses.
+
+
+== Options
+
+By default, HasHeartbeat simply responds with success or failure and can be used for up/down
+verification. 
+
+=== Check Database Up/Down
+
+You can ask the heartbeat action to also check against a model of your database to ensure that
+your database is up and running by adding the following to a file in your config/initializers:
+
+  HasHeartbeat.configure do |config|
+    config.check_model = User
+  end
+
+Specify any of your ActiveRecord models (in place of User) and the heartbeat will attempt to
+load the first row from the corresponding table when it is struck.
+
+=== External Notifications 
+
+Further, if you'd like HasHeartbeat to notify an external service when your application is down
+or experiencing an error, you can ask it to piggy-back off an existing Airbrake configuration
+you are using. To do so, add the following to a config/initializer:
+
+  HasHeartbeat.configure do |config|
+    config.use_airbrake!
+  end
+
+By specifying +use_airbrake!+, HasHeartbeat will use any existing Airbrake configuration and send
+a notification to your Airbrake service in the following form:
+
+  {
+    :error_class   => "Heartbeat Failure",                    # <= Generic title
+    :error_message => "Heartbeat Failure: #{e.message}",      # <= Raised error message
+    :parameters    => params                                  # <= Request parameters
+  }
+
+If you don't wish to use Airbrake, simply leave out the call to +use_airbrake!+ and all is well.
+
+
+
+== Copyright
+
+Copyright 2012 Awexome Labs, LLC 
+http://awexomelabs.com
+http://facebook.com/AwexomeLabs
+http://twitter.com/awexomelabs
+
