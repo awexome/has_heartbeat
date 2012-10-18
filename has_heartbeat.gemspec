@@ -15,6 +15,20 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
+  s.files = [
+    "CHANGELOG.rdoc",
+    "Gemfile",
+    "Gemfile.lock",
+    "README.rdoc",
+    "ROADMAP.rdoc",
+    "Rakefile",
+    "VERSION",
+    "app/controllers/heartbeat_controller.rb",
+    "config/routes.rb",
+    "has_heartbeat.gemspec",
+    "lib/has_heartbeat.rb",
+    "lib/has_heartbeat/configuration.rb"
+  ]
   s.homepage = "http://github.com/awexome/has_heartbeat"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
