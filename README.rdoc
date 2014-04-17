@@ -1,7 +1,7 @@
 = HasHeartbeat
 
-Controller with target for heartbeat monitoring with body, HTTP status code, and Airbrake
-issue identification.
+Controller with target for heartbeat monitoring with customizable status body text, HTTP
+status codes, and optional integration with Airbrake notifier.
 
 
 == Install
@@ -18,7 +18,7 @@ on the Airbrake notification gem, which will be added to your dependency set.
 == Usage
 
 By adding the HasHeartbeat gem to your project, your project will have a "/heartbeat" endpoint
-added to your routes. You can add this URL to your heartbeat/monitring service of choice or 
+added to your routes. You can add this URL to your heartbeat/monitoring service of choice or
 strike it directly to verify that your application is alive and well.
 
 The heartbeat action responds with one of two possible responses. In the case of an app's
@@ -26,11 +26,13 @@ successfully beating heart:
 
   HTTP Status:   200 OK
   Response Body: Application Heart Beating OK
+  Logger Output: Application Heart Beating OK
 
 And the case arising from internal issue or error:
 
   HTTP Status:   500 Server Error
   Response Body: 500 Internet Server Error: Application Heart Palpitations
+  Logger Output: 500 Internet Server Error: Application Heart Palpitations
 
 Configure your monitoring service to check against status codes and/or response body text to
 properly triage responses.
@@ -39,25 +41,43 @@ properly triage responses.
 == Options
 
 By default, HasHeartbeat simply responds with success or failure and can be used for up/down
-verification. 
+verification. You can customize its behavior as follows:
 
 === Check Database Up/Down
 
-You can ask the heartbeat action to also check against a model of your database to ensure that
-your database is up and running by adding the following to a file in your config/initializers:
+You can ask the heartbeat to also check that your application is connected to your database.
+To do so, configure like so:
 
+  # config/initializers/heartbeat.rb
   HasHeartbeat.configure do |config|
-    config.check_model = User
+    config.check_db!
   end
 
-Specify any of your ActiveRecord models (in place of User) and the heartbeat will attempt to
-load the first row from the corresponding table when it is struck.
+HasHeartbeat will check against the database by default. You can turn this off, if you really
+don't need it:
 
-=== External Notifications 
+  config.check_db!(false)
 
-Further, if you'd like HasHeartbeat to notify an external service when your application is down
-or experiencing an error, you can ask it to piggy-back off an existing Airbrake configuration
-you are using. To do so, add the following to a config/initializer:
+
+=== Custom Responses
+
+By default, the heartbeat action will render text responses with the HTTP service codes as
+described above. You may wish to customize the success or failure messages or the failure
+status code. To do so, get back into your initializer:
+
+  # config/initializers/heartbeat.rb
+  HasHeartbeat.configure do |config|
+    config.ok_text = "This is my OK output"
+    config.fail_text = "This response text is output on DB connect issues"
+    config.fail_status = 404      # Change from 500 to something more specific
+  end
+
+
+=== External Notifications
+
+Further, if you'd like HasHeartbeat to notify an external service when your application is
+experiencing a database connection error, you can ask it to piggy-back off an existing Airbrake
+configuration you are using. To do so, add the following to a config/initializer:
 
   HasHeartbeat.configure do |config|
     config.use_airbrake!
@@ -78,7 +98,7 @@ If you don't wish to use Airbrake, simply leave out the call to +use_airbrake!+ 
 
 == Copyright
 
-Copyright 2012 Awexome Labs, LLC 
+Copyright 2014 Awexome Labs, LLC
 http://awexomelabs.com
 http://facebook.com/AwexomeLabs
 http://twitter.com/awexomelabs

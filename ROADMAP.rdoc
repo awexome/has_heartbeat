@@ -9,8 +9,8 @@ Released April 2014.
   * DEPRECATED: check_model accessors deprecated. Setting a model to query/check against
       now results in check_db! being set to true. Model name is ignored.
   * CHANGE: Route changed to GET "heartbeat#beat" and named "heartbeat"
-  * NEW: Customizable success text output to logs and browser
-  * NEW: Customizable fail text for database check failure to logs and browser
+  * NEW: Customizable success text output to both logs and browser
+  * NEW: Customizable fail text for database check failure to both logs and browser
   * NEW: Customizable fail HTTP status code for database check failure
 
 Removed configuration methods:
