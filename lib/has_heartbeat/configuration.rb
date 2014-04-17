@@ -6,17 +6,38 @@ module HasHeartbeat
   class Configuration
 
     # Configurable options:
-    attr_accessor :check_model, :use_airbrake
+    attr_accessor :check_db, :ok_text, :fail_text, :fail_status, :use_airbrake
 
     # Declare defaults on load:
     def initialize
-      @check_model = nil
-      @use_airbrake = false
+      @check_db = true        # Can be turned off with check_db!
+      @use_airbrake = false   # Can be turned on with use_airbrake!
+
+      # Default status texts:
+      @ok_text = "Application Heart Beating OK"
+      @fail_text = "500 Internet Server Error: Application Heart Palpitations"
+      @fail_status = 500
     end
 
-    # Does the heartbeat check a database model?
-    def check_model?
-      !check_model.nil?
+    # Set heartbeat to check that database is connected:
+    def check_db!(on=true)
+      @check_db = on
+    end
+
+    # Does this heartbeat check the database connection?
+    def check_db?
+      @check_db == true
+    end
+
+    # Deprecated check_model configuration sets check_db for now:
+    def check_model=(klass)
+      ActiveSupport::Deprecation.warn("HasHeartbeat: check_model method is no longer supported and will be removed in the next version. Use check_db! instead.")
+      @check_model = klass
+      check_db!(true)
+    end
+    def check_model
+      ActiveSupport::Deprecation.warn("HasHeartbeat: check_model method is no longer supported and will be removed in the next version. Use check_db! instead.")
+      @check_model
     end
 
     # Set the configuration to use Airbrake notifier:

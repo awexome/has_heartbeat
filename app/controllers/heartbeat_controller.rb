@@ -6,20 +6,20 @@
 
 class HeartbeatController < ActionController::Base
 
-  def index
+  def beat
     begin
-      if HasHeartbeat.configuration.check_model?
-        Rails.logger.info "Heartbeat checking database against model #{HasHeartbeat.configuration.check_model.to_s}"
-        HasHeartbeat.configuration.check_model.send(:first)
+      if HasHeartbeat.configuration.check_db?
+        Rails.logger.info "HasHeartbeat checking database connection is active."
+        raise Exception.new("HasHeartbeat: Database not connected.") unless ActiveRecord::Base.connected?
       else
-        Rails.logger.info "Heartbeat not checking against database"
+        Rails.logger.debug "HasHeartbeat not checking database connection."
       end
-      Rails.logger.info "Application Heart Beating OK"
-      render :text => "Application Heart Beating OK"
+      Rails.logger.info HasHeartbeat.configuration.ok_text
+      render text: HasHeartbeat.configuration.ok_text
+
     rescue Exception => e
-      Rails.logger.error "Heartbeat Error: #{e.message}"
       if HasHeartbeat.configuration.use_airbrake?
-        Rails.logger.error "Heartbeat notifying Airbrake endpoint."
+        Rails.logger.error "Heartbeat notifying Airbrake endpoint, if configured."
         ::Airbrake.notify(
           :error_class   => "Heartbeat Failure",
           :error_message => "Heartbeat Failure: #{e.message}",
@@ -28,8 +28,10 @@ class HeartbeatController < ActionController::Base
       else
         Rails.logger.error "Heartbeat not notifying Airbrake endpoint."
       end
-      render :text => "500 Internet Server Error: Application Heart Palpitations", :status => 500
+
+      render text: HasHeartbeat.configuration.fail_text, status: HasHeartbeat.configuration.fail_status
     end
+
   end
 
 end

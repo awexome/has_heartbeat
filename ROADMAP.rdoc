@@ -1,10 +1,39 @@
 = HasHeartbeat Road Map
 
+== v0.2
+
+Released April 2014.
+
+  * IMPROVEMENT: Check status of database connection instead of querying model table with
+      new configuration check_db!
+  * DEPRECATED: check_model accessors deprecated. Setting a model to query/check against
+      now results in check_db! being set to true. Model name is ignored.
+  * CHANGE: Route changed to GET "heartbeat#beat" and named "heartbeat"
+  * NEW: Customizable success text output to logs and browser
+  * NEW: Customizable fail text for database check failure to logs and browser
+  * NEW: Customizable fail HTTP status code for database check failure
+
+Removed configuration methods:
+
+  * check_model=, check_model
+
+Added configuration methods:
+
+  * check_db!
+  * ok_text
+  * fail_text
+  * fail_status
+
 
 == v0.1
 
-Expected release October 2012.
+Released October 2012.
 
-Initial features planned, pulled from previous Awexome Labs client
-project components.
+  * Adds heartbeat/index path to Rails project routes
+  * Returns 200 OK with text response with heartbeat
+  * Returns 500 Error with text response without heartbeat
+  * Accepts name of project model to query against to test database connection
+  * Piggybacks off existing app Airbrake notifier configuration if desired
+
+Initial features planned, pulled from previous Awexome Labs client project components.
 
