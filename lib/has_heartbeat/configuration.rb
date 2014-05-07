@@ -6,12 +6,11 @@ module HasHeartbeat
   class Configuration
 
     # Configurable options:
-    attr_accessor :check_db, :ok_text, :fail_text, :fail_status, :use_airbrake
+    attr_accessor :check_db, :ok_text, :fail_text, :fail_status
 
     # Declare defaults on load:
     def initialize
       @check_db = true        # Can be turned off with check_db!
-      @use_airbrake = false   # Can be turned on with use_airbrake!
 
       # Default status texts:
       @ok_text = "Application Heart Beating OK"
@@ -40,15 +39,6 @@ module HasHeartbeat
       @check_model
     end
 
-    # Set the configuration to use Airbrake notifier:
-    def use_airbrake!
-      @use_airbrake = true
-    end
-
-    # Does this heartbeat check use Airbrake notifier?
-    def use_airbrake?
-      @use_airbrake == true
-    end
 
   end # Configuration
 

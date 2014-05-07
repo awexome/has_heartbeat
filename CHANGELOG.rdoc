@@ -12,5 +12,4 @@ This document details notable changes between versions in the gem.
 * HeartbeatController with index action
 * Database model search test
 * HTTP Status Code appropriate response (200, 500)
-* Airbrake notification for heartbeat failures
 

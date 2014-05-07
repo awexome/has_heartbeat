@@ -3,7 +3,6 @@
 Controller with target for heartbeat monitoring with customizable status body text, HTTP
 status codes, and optional integration with Airbrake notifier.
 
-
 == Install
 
 HasHeartbeat is intended for use in Rails applications. To add a heartbeat endpoint to your
@@ -11,8 +10,7 @@ application, add HasHeartbeat to your Gemfile:
 
   gem "has_heartbeat"
 
-The gem has dependencies on versions of Rails from 3.1 and upward, as well as a dependency
-on the Airbrake notification gem, which will be added to your dependency set.
+The gem has dependencies on versions of Rails from 3.1 and upward.
 
 
 == Usage
@@ -58,7 +56,6 @@ don't need it:
 
   config.check_db!(false)
 
-
 === Custom Responses
 
 By default, the heartbeat action will render text responses with the HTTP service codes as
@@ -71,29 +68,6 @@ status code. To do so, get back into your initializer:
     config.fail_text = "This response text is output on DB connect issues"
     config.fail_status = 404      # Change from 500 to something more specific
   end
-
-
-=== External Notifications
-
-Further, if you'd like HasHeartbeat to notify an external service when your application is
-experiencing a database connection error, you can ask it to piggy-back off an existing Airbrake
-configuration you are using. To do so, add the following to a config/initializer:
-
-  HasHeartbeat.configure do |config|
-    config.use_airbrake!
-  end
-
-By specifying +use_airbrake!+, HasHeartbeat will use any existing Airbrake configuration and send
-a notification to your Airbrake service in the following form:
-
-  {
-    :error_class   => "Heartbeat Failure",                    # <= Generic title
-    :error_message => "Heartbeat Failure: #{e.message}",      # <= Raised error message
-    :parameters    => params                                  # <= Request parameters
-  }
-
-If you don't wish to use Airbrake, simply leave out the call to +use_airbrake!+ and all is well.
-
 
 
 == Copyright

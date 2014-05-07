@@ -18,17 +18,6 @@ class HeartbeatController < ActionController::Base
       render text: HasHeartbeat.configuration.ok_text
 
     rescue Exception => e
-      if HasHeartbeat.configuration.use_airbrake?
-        Rails.logger.error "Heartbeat notifying Airbrake endpoint, if configured."
-        ::Airbrake.notify(
-          :error_class   => "Heartbeat Failure",
-          :error_message => "Heartbeat Failure: #{e.message}",
-          :parameters    => params
-        )
-      else
-        Rails.logger.error "Heartbeat not notifying Airbrake endpoint."
-      end
-
       render text: HasHeartbeat.configuration.fail_text, status: HasHeartbeat.configuration.fail_status
     end
 

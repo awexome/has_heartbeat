@@ -8,9 +8,6 @@ source "http://rubygems.org"
 # This gem adds functionality to Rails applications:
 gem "rails", ">= 3.1.0"
 
-# And requires Airbrake notification for some features:
-gem "airbrake", "~> 3.1"
-
 
 # Development dependencies:
 group :development do
