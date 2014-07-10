@@ -4,7 +4,6 @@
 require "has_heartbeat"
 require "rails"
 require "action_controller"
-require "airbrake"
 
 require "has_heartbeat/configuration"
 

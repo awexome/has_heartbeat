@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/awexome/has_heartbeat"
   gem.license = "MIT"
   gem.summary = %Q{Application heartbeat monitor for Rails}
-  gem.description = %Q{Simple heartbeat monitoring target for Rails apps with database connection testing, customizable output, HTTP status code, and Airbrake notification.}
+  gem.description = %Q{Simple heartbeat monitoring target for Rails apps with database connection testing, customizable output, and HTTP status code.}
   gem.email = "engineering@awexomelabs.com"
   gem.authors = ["Awexome Labs"]
   # dependencies defined in Gemfile
